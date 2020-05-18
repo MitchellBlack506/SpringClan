@@ -1,0 +1,33 @@
+#All the Modules required
+import discord
+import os
+import asyncio
+import time
+import sched
+from discord.ext import commands, tasks
+
+#defining strings
+prefix = "?" #changing in the quote will change commands from ? to Something else
+client  = discord.Client() #changing client will change what you call below. e.g @client.event would change to @bot.event
+message = 'Message Here'
+
+#Prints in the console 'Bot Online.' when the bot starts
+@client.event
+async def on_ready():
+    print('Bot Online.')
+
+#Code that sends message
+@tasks.loop(minutes=360) #changing the (minutes=360) to a different number will change how long before the netxt message gets sent
+async def called_once_a_hour():
+    message_channel = client.get_channel(688172874510499859) #The value in the brackets is the channel_id of where the message gets sent
+    print(f"Got channel {message_channel}") #prints in console when the channel was found
+    await message_channel.send(f'{message}', delete_after=21600) # Value in seconds, Use google to convert the minutes above to seconds.
+
+#used for the loop
+@called_once_a_hour.before_loop
+async def before():
+    await client.wait_until_ready()
+    print("Finished waiting")
+
+called_once_a_hour.start() #used for the loop
+client.run('XXX') #running the bot
