@@ -1,0 +1,36 @@
+#imports
+import discord
+import random
+import time
+from discord.ext import commands, tasks
+from random import randint
+
+#defining strings
+client = discord.Client()
+messages = ["1",
+            "2",
+            "3",
+            "4",
+            "5"}
+            
+client.time_interval = random.randint(2, 6) # used to declare the intriger
+
+#Prints in the console "Bot Online." when the bot starts
+@client.event
+async def on_ready():
+    print("Bot Online.")
+
+@tasks.loop(hours=client.time_interval) #changing the (minutes=360) to a different number will change how long before the netxt message gets sent
+async def called_when_ready():
+    message_channel = client.get_channel(711593839726690314) #The value in the brackets is the channel_id of where the message gets sent
+    await message_channel.send(f"{random.choice(messages)}") # message sender
+    client.time_interval = random.randint(2, 6) # used to declare the intriger
+    print(f"{client.time_interval}")
+    
+#used for the loop
+@called_when_ready.before_loop
+async def before():
+    await client.wait_until_ready()
+
+called_when_ready.start() #starts the loop
+client.run("xxx")
