@@ -1,0 +1,3 @@
+@client.command()
+async def addrole(ctx, user: discord.Member, role: discord.Role): # !addrole @UserName @RoleName
+    await user.add_roles(role) # Adds the Role
